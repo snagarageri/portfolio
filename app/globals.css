@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+:root {
+  --background: #10172a;
+  --background-soft: #161e36;
+  --foreground: #f4f2ed;
+  --foreground-dim: #9aa3bd;
+  --coral: #ff6b5e;
+  --lime: #c2f542;
+  --periwinkle: #7c8cff;
+  --font-display: "Fredoka", ui-rounded, "Segoe UI", sans-serif;
+  --font-body: "Space Grotesk", ui-monospace, "SF Mono", monospace;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-soft: var(--background-soft);
+  --color-foreground: var(--foreground);
+  --color-foreground-dim: var(--foreground-dim);
+  --color-coral: var(--coral);
+  --color-lime: var(--lime);
+  --color-periwinkle: var(--periwinkle);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), sans-serif;
+}
+
+::selection {
+  background: var(--lime);
+  color: var(--background);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
