@@ -2,6 +2,14 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import {
+  Brain,
+  Cloud,
+  Database,
+  Code2,
+  Workflow,
+  BarChart3,
+} from "lucide-react";
 import { useMascot } from "@/lib/mascot-context";
 import { useSectionInView } from "@/lib/use-section-in-view";
 
@@ -12,17 +20,78 @@ type Node = {
   y: number;
   r: number;
   color: string;
+  icon: typeof Brain;
+  tools: string[];
   connections: string[];
 };
 
 const NODES: Node[] = [
-  { id: "py", label: "Python", x: 100, y: 90, r: 34, color: "#C2F542", connections: ["pt", "skl", "pd"] },
-  { id: "pt", label: "PyTorch", x: 260, y: 50, r: 30, color: "#7C8CFF", connections: ["py", "cv", "nlp"] },
-  { id: "skl", label: "scikit-learn", x: 250, y: 170, r: 26, color: "#7C8CFF", connections: ["py", "pd"] },
-  { id: "pd", label: "Pandas", x: 90, y: 210, r: 26, color: "#FF6B5E", connections: ["py", "skl"] },
-  { id: "cv", label: "Computer Vision", x: 420, y: 30, r: 24, color: "#C2F542", connections: ["pt"] },
-  { id: "nlp", label: "NLP", x: 430, y: 130, r: 26, color: "#C2F542", connections: ["pt", "llm"] },
-  { id: "llm", label: "LLMs", x: 380, y: 220, r: 28, color: "#FF6B5E", connections: ["nlp"] },
+  {
+    id: "ai",
+    label: "AI / GenAI",
+    x: 110,
+    y: 60,
+    r: 38,
+    color: "#C2F542",
+    icon: Brain,
+    tools: ["Vertex AI", "Gemini", "LLMs", "RAG", "LangChain", "Vector Search", "MLflow"],
+    connections: ["cloud", "data"],
+  },
+  {
+    id: "bigdata",
+    label: "Big Data",
+    x: 300,
+    y: 35,
+    r: 32,
+    color: "#7C8CFF",
+    icon: Workflow,
+    tools: ["Spark", "Kafka", "Hadoop", "Hive", "Beam", "NiFi"],
+    connections: ["ai", "cloud"],
+  },
+  {
+    id: "cloud",
+    label: "Cloud",
+    x: 230,
+    y: 150,
+    r: 36,
+    color: "#FF6B5E",
+    icon: Cloud,
+    tools: ["GCP", "AWS", "Azure", "BigQuery", "Dataflow", "EMR", "Databricks"],
+    connections: ["ai", "bigdata", "data", "swe"],
+  },
+  {
+    id: "data",
+    label: "Data Warehousing",
+    x: 70,
+    y: 190,
+    r: 30,
+    color: "#FF6B5E",
+    icon: Database,
+    tools: ["Snowflake", "Redshift", "PostgreSQL", "Teradata", "MongoDB"],
+    connections: ["ai", "cloud", "bi"],
+  },
+  {
+    id: "swe",
+    label: "Software Eng",
+    x: 400,
+    y: 130,
+    r: 30,
+    color: "#C2F542",
+    icon: Code2,
+    tools: ["Python", "FastAPI", "REST APIs", "CI/CD", "Microservices"],
+    connections: ["cloud"],
+  },
+  {
+    id: "bi",
+    label: "Analytics & BI",
+    x: 150,
+    y: 235,
+    r: 28,
+    color: "#7C8CFF",
+    icon: BarChart3,
+    tools: ["Tableau", "Power BI", "SQL", "Pandas", "EDA"],
+    connections: ["data"],
+  },
 ];
 
 export default function Skills() {
@@ -30,10 +99,9 @@ export default function Skills() {
   const ref = useSectionInView(() => setPose("think"));
   const [active, setActive] = useState<string | null>(null);
 
+  const activeNode = NODES.find((n) => n.id === active);
   const isConnected = (id: string) =>
-    !active ||
-    active === id ||
-    NODES.find((n) => n.id === active)?.connections.includes(id);
+    !active || active === id || activeNode?.connections.includes(id);
 
   return (
     <section
@@ -48,12 +116,13 @@ export default function Skills() {
         What I work with
       </h2>
       <p className="mt-4 max-w-md text-center text-foreground-dim">
-        Hover a node to trace how things connect — pretty fitting for an ML
-        stack.
+        Hover a node to trace how things connect — and see the tools inside
+        each one.
       </p>
 
-      <div className="mt-12 w-full max-w-2xl">
-        <svg viewBox="0 0 480 250" className="w-full">
+      <div className="mt-12 grid w-full max-w-5xl gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+        {/* graph */}
+        <svg viewBox="0 0 460 270" className="w-full">
           {NODES.flatMap((node) =>
             node.connections.map((targetId) => {
               const target = NODES.find((n) => n.id === targetId);
@@ -89,21 +158,20 @@ export default function Skills() {
                   r={node.r}
                   fill={node.color}
                   initial={{ scale: 0, opacity: 0 }}
-                  whileInView={{ scale: 1, opacity: dim ? 0.25 : 0.9 }}
+                  whileInView={{ scale: 1, opacity: dim ? 0.22 : 0.9 }}
                   viewport={{ once: true }}
-                  animate={{ scale: active === node.id ? 1.12 : 1 }}
+                  animate={{ scale: active === node.id ? 1.1 : 1 }}
                   transition={{ type: "spring", stiffness: 220, damping: 16 }}
                 />
                 <text
                   x={node.x}
-                  y={node.y}
+                  y={node.y + node.r + 16}
                   textAnchor="middle"
-                  dominantBaseline="middle"
                   fontSize="11"
                   fontFamily="var(--font-body)"
                   fontWeight={600}
-                  fill="#10172A"
-                  opacity={dim ? 0.3 : 1}
+                  fill="#F4F2ED"
+                  opacity={dim ? 0.25 : 1}
                   className="pointer-events-none select-none"
                 >
                   {node.label}
@@ -112,6 +180,51 @@ export default function Skills() {
             );
           })}
         </svg>
+
+        {/* detail panel */}
+        <motion.div
+          key={active ?? "default"}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="rounded-3xl border border-periwinkle/20 bg-background-soft p-6"
+        >
+          {activeNode ? (
+            <>
+              <div className="flex items-center gap-3">
+                <div
+                  className="flex h-10 w-10 items-center justify-center rounded-full"
+                  style={{ background: activeNode.color }}
+                >
+                  <activeNode.icon size={20} color="#10172A" />
+                </div>
+                <h3 className="font-display text-xl text-foreground">
+                  {activeNode.label}
+                </h3>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {activeNode.tools.map((tool) => (
+                  <span
+                    key={tool}
+                    className="rounded-full border border-periwinkle/25 px-3 py-1 text-xs text-foreground-dim"
+                  >
+                    {tool}
+                  </span>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="font-display text-xl text-foreground">
+                Six areas, one pipeline
+              </p>
+              <p className="mt-2 text-sm text-foreground-dim">
+                Hover any node on the left — this panel shows the actual
+                tools behind it.
+              </p>
+            </>
+          )}
+        </motion.div>
       </div>
     </section>
   );

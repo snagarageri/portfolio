@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Mail, Phone, GitFork } from "lucide-react";
 import { useMascot } from "@/lib/mascot-context";
 import { useSectionInView } from "@/lib/use-section-in-view";
 
@@ -23,26 +24,29 @@ export default function Contact() {
         Let&apos;s build something
       </motion.h2>
       <p className="mt-4 max-w-md text-foreground-dim">
-        Open to roles, collabs, or just talking shop about models that
+        Open to roles, collabs, or just talking shop about pipelines that
         almost worked.
       </p>
       <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-        <a
-          href="mailto:you@example.com"
-          className="rounded-full bg-lime px-6 py-3 font-display text-sm font-medium text-background transition-transform hover:scale-105"
+        
+          href="mailto:saichitranagarageri@gmail.com"
+          className="flex items-center gap-2 rounded-full bg-lime px-6 py-3 font-display text-sm font-medium text-background transition-transform hover:scale-105"
         >
+          <Mail size={16} />
           Email me
         </a>
-        <a
-          href="#"
-          className="rounded-full border border-periwinkle/40 px-6 py-3 font-display text-sm font-medium text-foreground transition-colors hover:border-periwinkle"
+        
+          href="tel:+15103964135"
+          className="flex items-center gap-2 rounded-full border border-periwinkle/40 px-6 py-3 font-display text-sm font-medium text-foreground transition-colors hover:border-periwinkle"
         >
-          LinkedIn
+          <Phone size={16} />
+          Call
         </a>
-        <a
+        
           href="#"
-          className="rounded-full border border-periwinkle/40 px-6 py-3 font-display text-sm font-medium text-foreground transition-colors hover:border-periwinkle"
+          className="flex items-center gap-2 rounded-full border border-periwinkle/40 px-6 py-3 font-display text-sm font-medium text-foreground transition-colors hover:border-periwinkle"
         >
+          <GitFork size={16} />
           GitHub
         </a>
       </div>
